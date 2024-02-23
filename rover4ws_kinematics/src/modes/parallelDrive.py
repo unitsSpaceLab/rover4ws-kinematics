@@ -11,18 +11,25 @@ class LateralDrive(BaseKinematics):
         return (None, None, None) #To- DO
 
     def _applyWheelsCommands(self, in_speed_high_level):
-        self._current_steer[:] = np.pi/2
-        self._current_wheel_speed[:] = in_speed_high_level[1]/self.config["wheel_radius"]
+        self._current_steer[0] = -np.pi/2
+        self._current_steer[1] = np.pi/2
+        self._current_steer[2] = np.pi/2
+        self._current_steer[3] = -np.pi/2
+        self._current_wheel_speed[:] = np.abs(in_speed_high_level[1]/self.config["wheel_radius"])
 
     def _applyWheelsHomingPosition(self):
-        self._current_steer[:] = np.pi/2
+        self._current_steer[0] = -np.pi/2
+        self._current_steer[1] = np.pi/2
+        self._current_steer[2] = np.pi/2
+        self._current_steer[3] = -np.pi/2
         self._current_wheel_speed[:] = 0
 
     def _preprocessHighLevelSpeeds(self, high_level_speed):
         high_level_speed[2] = 0
         high_level_speed[0] = 0
         self._v_wheels[:,1] = high_level_speed[1]
-        
+        high_level_speed = super()._preprocessHighLevelSpeeds(high_level_speed)
+
         return high_level_speed
 
 
